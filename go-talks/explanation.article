@@ -1,0 +1,38 @@
+Google App Engineによる静的コンテンツ配信方法
+28 Feb 2016
+
+nuki_pon
+@nuki_pon
+
+* 設定内容の解説
+
+** app.yaml
+`app/app.yaml`
+.code -numbers ../app/app.yaml
+
+*** application
+
+consoleで作成したapplication-idを設定
+https://console.cloud.google.com/
+
+例) 
+application: freegufo-static
+
+*** version
+
+GAEでは、一つのアプリケーションで複数のバージョンを設定することが可能です。
+
+数字に限らず、文字列の設定が可能です。
+
+例）
+version: static
+
+
+
+*** 出来上がったapp.yaml
+
+app/app.yaml.sample
+
+.code -numbers ../app/app.yaml.sample
+
+** app

@@ -1,0 +1,28 @@
+application: myapp
+version: 1
+runtime: go
+api_version: go1
+
+default_expiration: "4d 5h"
+
+handlers:
+# - url: /
+#   static_files: static/html/index.html
+#   upload: static/html/index.html
+
+
+- url: /(.*\.html)
+  static_dir: static/html
+
+- url: /css
+  static_dir: static/css
+
+- url: /js
+  static_dir: static/js
+
+- url: /(.*\.(gif|png|jpg))$
+  static_files: static/images\1
+  upload: static/images/.*\.(gif|png|jpg)$
+
+- url: /.*
+  script: _go_app
