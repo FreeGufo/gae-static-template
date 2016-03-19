@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: http://[[applicationid]].appspot.com/sitemap.xml

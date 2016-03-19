@@ -6,19 +6,32 @@ nuki_pon
 
 * 設定内容の解説
 
-** app.yaml
+ここでは、当サンプルの各項目について解説したいと思います。
+
+** app.yamlについて
 `app/app.yaml`
 .code -numbers ../app/app.yaml
 
-*** application
+*** applicationの設定
 
-consoleで作成したapplication-idを設定
-https://console.cloud.google.com/
+    application: myapp
+
+consoleで作成した project IDを設定
+.link https://console.cloud.google.com/
 
 例) 
 application: freegufo-static
 
-*** version
+注意）
+app.yamlでは、「application」となっていますが、GCPが出来る前のGAEでは、この項目に「application ID」を入れていました。
+
+古い記事や、慣例的にアプリケーションID問呼ばれることがありますが、project IDとAplication IDは同義の内容になります。
+
+
+
+*** versionの設定
+
+    version: 1
 
 GAEでは、一つのアプリケーションで複数のバージョンを設定することが可能です。
 
@@ -27,12 +40,137 @@ GAEでは、一つのアプリケーションで複数のバージョンを設�
 例）
 version: static
 
+*** runtimeの設定
+
+    runtime: go
+
+言語ですね。例では、 Golangでの設定になっています。
+
+この他には、
+
+- python27
+- php55
+
+など、言語ごとに決まっています。
+
+*** api_versionの設定
+
+    api_version: go1
 
 
-*** 出来上がったapp.yaml
+apiのバージョンです。
+こちらの値は、言語ごとに決められています。
 
-app/app.yaml.sample
+*** default_expirationの設定
 
-.code -numbers ../app/app.yaml.sample
+    default_expiration: "4d 5h"
 
-** app
+キャッシュの有効期限のデフォルトセッティングです。
+
+例では、色々試す際にキャッシュが聞きすぎると困ることもあるので、コメントにしていますが、コメントを外すと、4日と5時間が設定されています。
+
+このキャッシュは、レスポンスヘッダに設定され、クライアントでのキャッシュが有効になります。
+
+また、こちらでは制御できないものとして、Googleのエッジキャッシュがあります。こちらは、Google内でのルールに従うことになりますが、かなり協力なキャッシュです。
+
+使い方に寄っては、これを使うだけのためにGAEを使う価値がある程のものになります。
+
+
+*** handlersの設定
+
+アクセスパスの設定をしています。
+
+先に、Golangで自分で組んだプログラムを動かすための設定から紹介します。
+
+この設定に従って、Golangのアプリケーションを呼び出し自分で書いたプログラムを実行します。 
+
+    - url: /.*
+      script: _go_app
+      
+このアクセスが発生した際に、GAEのインスタンスが立ち上がり課金対象となります。
+
+例では、対象コンテンツがない場合の404 notfoundを返す部分のみ対応しています。
+
+この設定より前は、全てstaticなアクセスとなっており、インスタンスは生成せずに静的コンテンツを返しています。それぞれの設定を説明したいと思います。
+
+    - url: /
+      static_files: static/html/index.html
+      upload: static/html/index.html
+      
+ルート（/）へのアクセスが来た場合に、index.htmlの内容を表示する設定です。
+
+
+    - url: /(index.html|under.html)
+      static_files: static/html/\1
+      upload: static/html/.*
+
+「.html」へのアクセスに対応しています。
+
+正規表現を使って _(.*\.html)_ などとすることも可能ですが、この場合、ファイルが無かった場合には正常に表示されなくなるため、対象のページを明記しています。
+
+
+    - url: /css
+      static_dir: static/css
+
+    - url: /js
+      static_dir: static/js
+
+    - url: /fonts
+      static_dir: static/fonts
+      
+こちらも静的コンテンツの設定ですが、フォルダ内のファイルを返すための設定となります。
+
+    - url: /(.*\.(gif|png|jpg))$
+      static_files: static/images\1
+      upload: static/images/.*\.(gif|png|jpg)$
+      
+画像の設定です。対象画像ファイルを、拡張子で指定しています。
+
+
+    - url: /robots\.txt
+      static_files: robots.txt
+      upload: robots\.txt
+    
+    - url: /sitemap\.xml
+      static_files: sitemap.xml
+      upload: sitemap\.xml
+
+こちらは、Webサイトに必須の *robots.txt* と *sitemap.xml* の設定です。
+
+** src/main.goについて
+
+.code ../app/src/main.go
+
+こちらが、Golangで記載したプログラムになっています。
+
+app.yamlで、htmlやcss,jsなどの静的コンテンツの配信を先に記載しているため、それらにヒットしなかった場合に、このソースが動きます。
+
+今回のサンプルでは、静的コンテンツの配信を目的としているため、このロジックが動くのは、対象コンテンツがない場合、つまり404(notfound)の場合のみとなります。
+
+ここでは、Golangの説明は割愛しますが、最終的に出力している内容は、最後の行に書かれている。
+
+    template.Must(template.ParseFiles("templates/notfound.html")).Execute(w, nil)
+
+となります。
+
+`templates/notfound.html` がそれになります。
+
+サンプルの実際のパスとしては、「/app/templates/notfound.html」となっています。
+
+notfoundをカスタマイズするには、この内容を各サイトに合わせて変更して下さい。
+
+** 各サイト毎にカスタマイズする項目サマリ
+
+当サンプルを利用して静的コンテンツを配信するために変更が必要なフォルダは以下となります。
+
+    app/app.yaml
+    app/static 以下の各ファイル
+    templates/notfound.html
+    app/sitemap.xml、app/robots.txt のドメイン 
+ 
+** App Engineでの独自ドメイン、および、SSLの運用について
+
+今回のサンプルでは、詳しくは説明していませんが、GAEを使っても独自ドメインやSSLの運用は可能となっています。こちらのconsoleで設定をします。
+
+.link https://console.cloud.google.com/appengine/settings
+

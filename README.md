@@ -23,6 +23,12 @@ app/staticの中身を作成して下さい。
 
 notfound.htmlは、名前を変更せずに内容を変更して下さい。
 
+設定項目の詳細は、こちらを参照して下さい。
+
+http://go-talks.appspot.com/github.com/FreeGufo/gae-static-template/go-talks/explanation.article
+
+当リポジトリの「go-talks」ディレクトリにも同じ内容が入っています。
+
 ### ローカルでの実行
 ```
 cd [[project_home]] ※ app.yamlのあるディレクトリ
