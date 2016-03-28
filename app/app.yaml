@@ -23,10 +23,10 @@ handlers:
 - url: /fonts
   static_dir: static/fonts
 
-- url: /(.*\.(gif|png|jpg))$
-  static_files: static/images\1
-  upload: static/images/.*\.(gif|png|jpg)$
-
+- url: /images/(.*\.(gif|png|jpg|svg))$
+  static_files: static/images/\1
+  upload: static/images/.*\.(gif|png|jpg|svg)$
+    
 - url: /robots\.txt
   static_files: robots.txt
   upload: robots\.txt

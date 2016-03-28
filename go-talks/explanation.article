@@ -8,7 +8,18 @@ nuki_pon
 
 ここでは、当サンプルの各項目について解説したいと思います。
 
+静的コンテンツの配信には、CSS、JS、font、画像など必要な内容を追加していますので、一通り確認することで静的コンテンツの配信ができると思います。
+
+最低限の内容を含めてみました。
+
+CSSのフレームワークとして [[http://getbootstrap.com/][_Bootstrap_]] を利用しています。
+
 ** app.yamlについて
+
+ここで使用するapp.yamlは以下の通りです。
+公式サイトのapp.yamlサンプルを流用しています。
+
+
 `app/app.yaml`
 .code -numbers ../app/app.yaml
 
@@ -120,12 +131,12 @@ apiのバージョンです。
       
 こちらも静的コンテンツの設定ですが、フォルダ内のファイルを返すための設定となります。
 
-    - url: /(.*\.(gif|png|jpg))$
-      static_files: static/images\1
-      upload: static/images/.*\.(gif|png|jpg)$
+    - url: /images/(.*\.(gif|png|jpg|svg))$
+      static_files: static/images/\1
+      upload: static/images/.*\.(gif|png|jpg|svg)$
       
 画像の設定です。対象画像ファイルを、拡張子で指定しています。
-
+サンプルにsvgファイルも追加してみました。
 
     - url: /robots\.txt
       static_files: robots.txt
