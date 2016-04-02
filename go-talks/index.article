@@ -111,14 +111,13 @@ apiのバージョンです。
 ルート（/）へのアクセスが来た場合に、index.htmlの内容を表示する設定です。
 
 
-    - url: /(index.html|under.html)
+    - url: /(index.html|image.html)
       static_files: static/html/\1
       upload: static/html/.*
 
 「.html」へのアクセスに対応しています。
 
 正規表現を使って _(.*\.html)_ などとすることも可能ですが、この場合、ファイルが無かった場合には正常に表示されなくなるため、対象のページを明記しています。
-
 
     - url: /css
       static_dir: static/css
@@ -138,6 +137,10 @@ apiのバージョンです。
 画像の設定です。対象画像ファイルを、拡張子で指定しています。
 サンプルにsvgファイルも追加してみました。
 
+    - url: /favicon\.ico
+      static_files: favicon.ico
+      upload: favicon\.ico
+      
     - url: /robots\.txt
       static_files: robots.txt
       upload: robots\.txt
@@ -146,7 +149,7 @@ apiのバージョンです。
       static_files: sitemap.xml
       upload: sitemap\.xml
 
-こちらは、Webサイトに必須の *robots.txt* と *sitemap.xml* の設定です。
+こちらは、Webサイトに必須の *favicon.ico* *robots.txt* と *sitemap.xml* の設定です。
 
 ** src/main.goについて
 

@@ -10,7 +10,7 @@
 		<priority>0.8</priority>
 	</url>
 	<url>
-    	<loc>http://[[applicationid]].appspot.com/under.html</loc>
+    	<loc>http://[[applicationid]].appspot.com/image.html</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.8</priority>
 	</url>
