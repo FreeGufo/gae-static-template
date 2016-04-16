@@ -1,6 +1,5 @@
 # 概要
 Google App Engine で静的コンテンツを配信するための雛形
-※まだ作成中です！！
  
 ## 目的
 
@@ -16,6 +15,7 @@ GolangのSDKをインストールします。
 
 https://cloud.google.com/appengine/downloads
 
+※ SDKのインストールの公式にもありますが、GoのSDKを使用する際もPython2.7が必要になります。
 
 ### staticディレクトリ内に静的コンテンツを作成する。
 
@@ -25,7 +25,7 @@ notfound.htmlは、名前を変更せずに内容を変更して下さい。
 
 設定項目の詳細は、こちらを参照して下さい。
 
-http://go-talks.appspot.com/github.com/FreeGufo/gae-static-template/go-talks/explanation.article
+http://go-talks.appspot.com/github.com/FreeGufo/gae-static-template/go-talks/index.article
 
 当リポジトリの「go-talks」ディレクトリにも同じ内容が入っています。
 
